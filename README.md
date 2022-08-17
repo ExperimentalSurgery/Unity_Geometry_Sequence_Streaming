@@ -21,3 +21,5 @@ Now open the Example Scene and hit play, you should see a very short sequence of
 ## Issues
 If you find any issues with this project, please report them in the [issue section](https://github.com/ExperimentalSurgery/Unity_Pointcloud_Player/issues)
 
+## License
+Released under the MIT License
