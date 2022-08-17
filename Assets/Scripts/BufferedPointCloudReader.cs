@@ -50,8 +50,6 @@ public class BufferedPointCloudReader
 
     public void ReadFrame()
     {
-        Debug.Log("Nframes = " + nFrames + " nFramesRead = " + nFramesRead + ", frameBuffer = " + frameBuffer.Length);
-
         if (nFramesRead < nFrames)
         {
 
