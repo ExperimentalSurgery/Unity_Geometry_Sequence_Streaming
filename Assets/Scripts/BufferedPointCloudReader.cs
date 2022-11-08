@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.IO;
 using UnityEngine;
-using System.Globalization;
+
 
 public struct Frame
 {
@@ -40,23 +38,21 @@ public class BufferedPointCloudReader
 
         catch (Exception e)
         {
-            Debug.LogError("Pointcloud path is not valid!");
+            UnityEngine.Debug.LogError("Pointcloud path is not valid!");
             return;
         }
 
         if (plyFilePaths.Length == 0)
-            Debug.LogError("Could not find any ply files!");
+            UnityEngine.Debug.LogError("Could not find any ply files!");
     }
 
     public void ReadFrame()
     {
         if (nFramesRead < nFrames)
         {
-
             if (frameBuffer[nFramesRead].frameDataIsAvailable == false)
             {
                 BinaryReader reader = new BinaryReader(new FileStream(plyFilePaths[nFramesRead], FileMode.Open));
-
                 bool doubleUsed = false;
                 bool alphaUsed = false;
 
@@ -107,43 +103,58 @@ public class BufferedPointCloudReader
                 frameBuffer[nFramesRead].frameData.frameVertices = new Vector3[numberOfPointsInFrame];
                 frameBuffer[nFramesRead].frameData.frameColors = new Color[numberOfPointsInFrame];
 
+                byte[] byteBuffer = reader.ReadBytes((int)(reader.BaseStream.Length - reader.BaseStream.Position));
+                reader.Close();
+
                 float x, y, z;
                 byte r, g, b, a;
+                int bufferPosition = 0;
 
                 for (int i = 0; i < numberOfPointsInFrame; i++)
                 {
                     if (doubleUsed)
                     {
-                        x = (float)reader.ReadDouble();
-                        y = (float)reader.ReadDouble();
-                        z = (float)reader.ReadDouble();
+                        x = (float)BitConverter.ToDouble(byteBuffer, bufferPosition);
+                        y = (float)BitConverter.ToDouble(byteBuffer, bufferPosition + sizeof(double));
+                        z = (float)BitConverter.ToDouble(byteBuffer, bufferPosition + 2 * sizeof(double));
+
+                        bufferPosition += 3 * sizeof(double);
                     }
 
                     else
                     {
-                        x = reader.ReadSingle();
-                        y = reader.ReadSingle();
-                        z = reader.ReadSingle();
+                        x = BitConverter.ToSingle(byteBuffer, bufferPosition);
+                        y = BitConverter.ToSingle(byteBuffer, bufferPosition + sizeof(float));
+                        z = BitConverter.ToSingle(byteBuffer, bufferPosition + 2 * sizeof(float));
+
+                        bufferPosition += 3 * sizeof(float);
                     }
 
+                    frameBuffer[nFramesRead].frameData.frameVertices[i].x = x;
+                    frameBuffer[nFramesRead].frameData.frameVertices[i].y = y;
+                    frameBuffer[nFramesRead].frameData.frameVertices[i].z = -z; // Invert Z Axis, to match Unitys Coordinate System
 
-                    frameBuffer[nFramesRead].frameData.frameVertices[i] = new Vector3(x, y, -z); // invert z axis from kinect data
+                    r = byteBuffer[bufferPosition];
+                    g = byteBuffer[bufferPosition + 1];
+                    b = byteBuffer[bufferPosition + 2];
 
-                    r = reader.ReadByte();
-                    g = reader.ReadByte();
-                    b = reader.ReadByte();
+                    bufferPosition += 3;
 
                     if (alphaUsed)
-                        a = reader.ReadByte();
+                    {
+                        a = byteBuffer[bufferPosition];
+                        bufferPosition++;
+                    }
 
-                    frameBuffer[nFramesRead].frameData.frameColors[i] = new Color((float)r / 256f, (float)g / 256f, (float)b / 256f, 1f);
+                    frameBuffer[nFramesRead].frameData.frameColors[i].r = r / 256f;
+                    frameBuffer[nFramesRead].frameData.frameColors[i].g = g / 256f;
+                    frameBuffer[nFramesRead].frameData.frameColors[i].b = b / 256f; 
                 }
 
                 frameBuffer[nFramesRead].frameDataIsAvailable = true;
 
                 nFramesRead++;
 
-                reader.Close();
             }
         }
     }
