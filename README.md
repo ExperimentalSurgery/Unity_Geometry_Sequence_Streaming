@@ -12,8 +12,6 @@ Either download the whole repository and open it up as Unity project, or [downlo
 
 Drop your numbered binary .ply files into the Data folder. Then in the Pointcloud Manager, change the relative path of "Path to sequence" to point to your folder. Now you can hit the play button, your sequence should start! Use the parameters on the Pointcloud Material, to adjust the look of your pointcloud. Especially the point size may need to be adjusted.
 
-It is recommended to let the whole sequence buffer once before showing it to the user, to avoid potential hiccups.
-
 ## Example Scene / Data
 The example scene demonstrates the setup of all scripts and gameobjects. If you have downloaded the whole Unity Repository, you already downloaded the test data. If you choose to download the package, please download [all the .ply files here](https://github.com/ExperimentalSurgery/Unity_Pointcloud_Player/tree/main/Data/Example) and the put them, relative to your projects root folder, under Data/Example.
 Now open the Example Scene and hit play, you should see a very short sequence of an animated pointcloud playing!
