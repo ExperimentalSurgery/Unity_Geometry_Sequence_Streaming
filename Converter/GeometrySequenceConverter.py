@@ -10,7 +10,7 @@ import threading
 ### +++++++++++++++++++++++++  PACKAGE INTO SINGLE EXECUTABLE ++++++++++++++++++++++++++++++++++
 #Use this prompt in the terminal to package this script into a single executable for your system
 #You need to have PyInstaller installed in your local environment
-# pyinstaller GeometrySequenceConverter.py --collect-all=pymeshlab --windowed --icon=logo.ico -F 
+# pyinstaller GeometrySequenceConverter.py --collect-all=pymeshlab --icon=resources/logo.ico -F 
 
 
 # determine if application is a script file or frozen exe and get the executable path
@@ -98,10 +98,14 @@ def convert_model(file):
     faceCount = len(ms.current_mesh().face_matrix())        
     
     is_pointcloud = True
+    has_UVs = False
 
-    #Is the file a mesh?        
+    #Is the file a mesh or pointcloud?        
     if(faceCount > 0):
         is_pointcloud = False
+
+    if(ms.current_mesh().has_wedge_tex_coord() == True or ms.current_mesh().has_vertex_tex_coord() == True):
+        has_UVs = True
 
     #There is a chance that the file might have wedge tex
     #coordinates which are unsupported in Unity, so we convert them
@@ -114,6 +118,8 @@ def convert_model(file):
         ms.apply_filter("meshing_poly_to_tri")
 
     
+
+
     vertices = None
     vertice_colors = None
     faces = None
@@ -128,9 +134,8 @@ def convert_model(file):
         vertices = ms.current_mesh().vertex_matrix().astype(np.float32)
         faces = ms.current_mesh().face_matrix()
 
-        hasUV = ms.current_mesh().has_vertex_tex_coord()
-        hasWedge = ms.current_mesh().has_wedge_tex_coord()        
-        uvs = ms.current_mesh().vertex_tex_coord_matrix().astype(np.float32)
+        if(has_UVs == True):     
+            uvs = ms.current_mesh().vertex_tex_coord_matrix().astype(np.float32)
     
     #The meshlab exporter doesn't support all the features we need, so we export the files manually
     #to PLY with our very stringent structure. This is needed because we want to keep the
@@ -156,8 +161,9 @@ def convert_model(file):
             header += "property uchar alpha" + "\n"
         
         else:
-            header += "property float s" + "\n" 
-            header += "property float t" + "\n"
+            if(has_UVs == True):
+                header += "property float s" + "\n" 
+                header += "property float t" + "\n"
             header += "element face " + str(len(faces)) + "\n"
             header += "property list uchar uint vertex_indices" + "\n"
 
@@ -188,14 +194,17 @@ def convert_model(file):
         else:
             verticeRaw = vertices.tobytes()
             faceRaw = faces.tobytes()
-            uvRaw = uvs.tobytes()
+
+            if(has_UVs == True):
+                uvRaw = uvs.tobytes()
 
             for index, line in enumerate(vertices):
                 #Copy 3 floats for xyz coordinates
                 body.extend(verticeRaw[index * 3 * 4:(index * 3 * 4) + 12])
 
                 #Copy 2 floats of Uv texture coordinates
-                body.extend(uvRaw[index * 2 * 4:(index * 2 * 4) + 8])
+                if(has_UVs == True):
+                    body.extend(uvRaw[index * 2 * 4:(index * 2 * 4) + 8])
 
             for index, line in enumerate(faces):
                 
