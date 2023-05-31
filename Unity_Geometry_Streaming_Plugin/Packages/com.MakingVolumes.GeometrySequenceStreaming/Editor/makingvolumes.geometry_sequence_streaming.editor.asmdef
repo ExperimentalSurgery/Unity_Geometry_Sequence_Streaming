@@ -1,0 +1,19 @@
+{
+    "name": "makingvolumes.geometry_sequence_streaming.editor",
+    "rootNamespace": "",
+    "references": [
+        "makingvolumes.geometry_sequence_streaming",
+        "Unity.Timeline"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

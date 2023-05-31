@@ -1,5 +1,14 @@
 {
   "dependencies": {
+    "com.makingvolumes.geometry_sequence_streaming": {
+      "version": "file:com.MakingVolumes.GeometrySequenceStreaming",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.unity.jobs": "0.70.0-preview.7",
+        "com.unity.timeline": "1.6.4"
+      }
+    },
     "com.unity.analytics": {
       "version": "3.6.12",
       "depth": 0,

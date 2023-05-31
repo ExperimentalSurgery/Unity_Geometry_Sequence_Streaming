@@ -1,0 +1,39 @@
+{
+  "name": "com.makingvolumes.geometry_sequence_streaming",
+  "version": "1.0.0",
+  "displayName": "Geometry Sequence Streaming",
+  "description": "This package allows you to stream large pointcloud and mesh sequences (e.g. volumetric video) from disk.",
+  "unity": "2020.1",
+  "documentationUrl": "https://stilltodo.com/",
+  "changelogUrl": "https://stilltodo.com/changelog.html",
+  "licensesUrl": "https://stilltodo.com/licensing.html",
+  "dependencies": {
+    "com.unity.jobs": "0.70.0-preview.7",
+    "com.unity.timeline": "1.6.4"
+  },
+  "keywords": [
+    "Geometry",
+    "Sequence",
+    "streaming",
+    "mesh",
+    "pointcloud",
+    "volumetric",
+    "video",
+    "LiveScan3D",
+    "Frame",
+    "Frames"
+  ],
+  "author": {
+    "name": "Christopher Remde",
+    "email": "chris.rem@proton.me",
+    "url": "https://chrisrem.de/"
+  },
+  "samples": [
+    {
+      "displayName": "Streaming Samples",
+      "description": "These samples show you how to playback a geometry sequence using the editor, timeline and API. Also contains a short sample sequence",
+      "path": "Samples~/StreamingSamples"
+    }
+  ],
+  "type": "tool"
+}
