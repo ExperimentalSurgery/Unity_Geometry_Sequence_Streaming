@@ -206,7 +206,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 47858290}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e7dae9e78b65f743bd908211c081193, type: 3}
+  m_Script: {fileID: 11500000, guid: f1b0c96f039b30d4b9681b2f7595dcef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   sequencePath: Samples\Geometry Sequence Streaming\1.0.0\Streaming Samples\ExampleData\Twisty_Box
