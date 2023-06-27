@@ -1,3 +1,6 @@
+> ⚠️ This repository has been archieved and will be deleted soon, [development continues here](https://github.com/BuildingVolumes/Unity_Geometry_Sequence_Streaming) ⚠️
+
+
 # Unity Pointcloud Player
 
 ![togif(1)](https://user-images.githubusercontent.com/39704202/185174903-fddb0da4-f148-465c-809e-e2fa84ecbbdd.gif)
